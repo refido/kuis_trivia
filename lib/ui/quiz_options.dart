@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kuis_trivia/models/category.dart';
 import 'package:kuis_trivia/models/question.dart';
 import 'package:kuis_trivia/resources/api_provider.dart';
-// import 'package:opentrivia/ui/pages/error.dart';
-// import 'package:opentrivia/ui/pages/quiz_page.dart';
+import 'error.dart';
+import 'quiz_page.dart';
 
 class QuizOptionsDialog extends StatefulWidget {
   final Category category;
@@ -39,7 +39,7 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
             color: Colors.grey.shade200,
             child: Text(
               widget.category.name,
-              // style: Theme.of(context).textTheme.title.copyWith(),
+              style: Theme.of(context).textTheme.headline6?.copyWith(),
             ),
           ),
           const SizedBox(height: 10.0),
@@ -108,12 +108,12 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
               children: <Widget>[
                 const SizedBox(width: 0.0),
                 // ActionChip(
-                //   label: const Text("Any"),
+                //   label: const Text("Default"),
                 //   labelStyle: const TextStyle(color: Colors.white),
-                //   backgroundColor: _difficulty == null
+                //   backgroundColor: _difficulty == "easy"
                 //       ? Colors.indigo
                 //       : Colors.grey.shade600,
-                //   onPressed: () => _selectDifficulty(null),
+                //   onPressed: () => _selectDifficulty("easy"),
                 // ),
                 ActionChip(
                   label: const Text("Easy"),
@@ -171,42 +171,52 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
     setState(() {
       processing = true;
     });
-    // try {
-    //   List<Question> questions =
-    //       await getQuestions(widget.category, _noOfQuestions, _difficulty);
-    //   Navigator.pop(context);
-    //   if (questions.length < 1) {
-    //     Navigator.of(context).push(MaterialPageRoute(
-    //         builder: (_) => ErrorPage(
-    //               message:
-    //                   "There are not enough questions in the category, with the options you selected.",
-    //             )));
-    //     return;
-    //   }
-    //   Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (_) => QuizPage(
-    //                 questions: questions,
-    //                 category: widget.category,
-    //               )));
-    // } on SocketException catch (_) {
-    //   Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (_) => ErrorPage(
-    //                 message:
-    //                     "Can't reach the servers, \n Please check your internet connection.",
-    //               )));
-    // } catch (e) {
-    //   print(e.message);
-    //   Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (_) => ErrorPage(
-    //                 message: "Unexpected error trying to connect to the API",
-    //               )));
-    // }
+    try {
+      List<Question> questions =
+          await getQuestions(widget.category, _noOfQuestions, _difficulty);
+      Navigator.pop(context);
+      if (questions.length < 1) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const ErrorPage(
+              message:
+                  "There are not enough questions in the category, with the options you selected.",
+              key: null,
+            ),
+          ),
+        );
+        return;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => QuizPage(
+            questions: questions,
+            category: widget.category,
+          ),
+        ),
+      );
+    } on SocketException catch (_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ErrorPage(
+            message:
+                "Can't reach the servers, \n Please check your internet connection.",
+          ),
+        ),
+      );
+    } catch (e) {
+      print(e);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ErrorPage(
+            message: "Unexpected error trying to connect to the API",
+          ),
+        ),
+      );
+    }
     setState(() {
       processing = false;
     });

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:kuis_trivia/models/category.dart';
-import 'package:kuis_trivia/ui/widgets/quiz_options.dart';
+import 'package:kuis_trivia/ui/quiz_options.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class HomePage extends StatelessWidget {
