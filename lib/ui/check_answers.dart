@@ -7,9 +7,14 @@ class CheckAnswersPage extends StatelessWidget {
   final List<Question> questions;
   final Map<int, dynamic> answers;
 
-  const CheckAnswersPage(
-      {Key? key, required this.questions, required this.answers})
-      : super(key: key);
+  static const myColorBG = Color.fromARGB(255, 39, 39, 39);
+  static const myColorCardBG = Color.fromARGB(255, 212, 170, 125);
+
+  const CheckAnswersPage({
+    Key? key,
+    required this.questions,
+    required this.answers,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,9 @@ class CheckAnswersPage extends StatelessWidget {
           ClipPath(
             clipper: WaveClipperTwo(),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              decoration: const BoxDecoration(
+                color: myColorBG,
+              ),
               height: 200,
             ),
           ),
@@ -42,14 +49,16 @@ class CheckAnswersPage extends StatelessWidget {
       return ElevatedButton(
         child: const Text("Done"),
         onPressed: () {
-          Navigator.of(context)
-              .popUntil(ModalRoute.withName(Navigator.defaultRouteName));
+          Navigator.of(context).popUntil(
+            ModalRoute.withName(Navigator.defaultRouteName),
+          );
         },
       );
     }
     Question question = questions[index];
     bool correct = question.correctAnswer == answers[index];
     return Card(
+      color: myColorCardBG,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -58,9 +67,10 @@ class CheckAnswersPage extends StatelessWidget {
             Text(
               HtmlUnescape().convert(question.question),
               style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.0),
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
             ),
             const SizedBox(height: 5.0),
             Text(

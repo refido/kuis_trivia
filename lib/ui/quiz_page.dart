@@ -9,20 +9,28 @@ class QuizPage extends StatefulWidget {
   final List<Question> questions;
   final Category category;
 
-  const QuizPage({Key? key, required this.questions, required this.category})
-      : super(key: key);
+  const QuizPage({
+    Key? key,
+    required this.questions,
+    required this.category,
+  }) : super(key: key);
 
   @override
   QuizPageState createState() => QuizPageState();
 }
 
 class QuizPageState extends State<QuizPage> {
+  static const myColorBG = Color.fromARGB(255, 39, 39, 39);
+  static const myColorSelect = Color.fromARGB(255, 255, 175, 240);
+
   final TextStyle _questionStyle = const TextStyle(
-      fontSize: 18.0, fontWeight: FontWeight.w500, color: Colors.white);
+    fontSize: 18.0,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
 
   int _currentIndex = 0;
   final Map<int, dynamic> _answers = {};
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); /deprecated
   final _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
@@ -39,7 +47,9 @@ class QuizPageState extends State<QuizPage> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(widget.category.name),
+          title: Text(
+            widget.category.name,
+          ),
           elevation: 0,
         ),
         body: Stack(
@@ -47,8 +57,9 @@ class QuizPageState extends State<QuizPage> {
             ClipPath(
               clipper: WaveClipperTwo(),
               child: Container(
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
+                decoration: const BoxDecoration(
+                  color: myColorBG,
+                ),
                 height: 200,
               ),
             ),
@@ -59,8 +70,13 @@ class QuizPageState extends State<QuizPage> {
                   Row(
                     children: <Widget>[
                       CircleAvatar(
-                        backgroundColor: Colors.white70,
-                        child: Text("${_currentIndex + 1}"),
+                        backgroundColor: Colors.white,
+                        child: Text(
+                          "${_currentIndex + 1}",
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 16.0),
                       Expanded(
@@ -80,21 +96,24 @@ class QuizPageState extends State<QuizPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        ...options.map((option) => RadioListTile(
-                              title: Text(
-                                HtmlUnescape().convert("$option"),
-                                style: MediaQuery.of(context).size.width > 800
-                                    ? const TextStyle(fontSize: 30.0)
-                                    : null,
-                              ),
-                              groupValue: _answers[_currentIndex],
-                              value: option,
-                              onChanged: (value) {
-                                setState(() {
-                                  _answers[_currentIndex] = option;
-                                });
-                              },
-                            )),
+                        ...options.map(
+                          (option) => RadioListTile(
+                            title: Text(
+                              HtmlUnescape().convert("$option"),
+                              style: MediaQuery.of(context).size.width > 800
+                                  ? const TextStyle(fontSize: 30.0)
+                                  : null,
+                            ),
+                            groupValue: _answers[_currentIndex],
+                            value: option,
+                            activeColor: myColorSelect,
+                            onChanged: (value) {
+                              setState(() {
+                                _answers[_currentIndex] = option;
+                              });
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -143,9 +162,12 @@ class QuizPageState extends State<QuizPage> {
         _currentIndex++;
       });
     } else {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) => QuizFinishedPage(
-              questions: widget.questions, answers: _answers)));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) =>
+              QuizFinishedPage(questions: widget.questions, answers: _answers),
+        ),
+      );
     }
   }
 
@@ -154,7 +176,8 @@ class QuizPageState extends State<QuizPage> {
           context: context,
           builder: (context) => AlertDialog(
             content: const Text(
-                "Are you sure you want to quit the quiz? All your progress will be lost."),
+              "Are you sure you want to quit the quiz? All your progress will be lost.",
+            ),
             title: const Text("Warning!"),
             actions: <Widget>[
               ElevatedButton(
