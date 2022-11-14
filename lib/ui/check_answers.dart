@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:kuis_trivia/models/question.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CheckAnswersPage extends StatelessWidget {
   final List<Question> questions;
@@ -46,8 +47,11 @@ class CheckAnswersPage extends StatelessWidget {
 
   Widget _buildItem(BuildContext context, int index) {
     if (index == questions.length) {
-      return ElevatedButton(
-        child: const Text("Done"),
+      return ElevatedButton.icon(
+        icon: const Icon(
+          FontAwesomeIcons.check,
+        ),
+        label: const Text("Done"),
         onPressed: () {
           Navigator.of(context).popUntil(
             ModalRoute.withName(Navigator.defaultRouteName),

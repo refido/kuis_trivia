@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'home.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ErrorPage extends StatelessWidget {
   final String message;
@@ -49,9 +52,16 @@ class ErrorPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20.0),
-                    ElevatedButton(
-                      child: const Text("Try Again"),
-                      onPressed: () => Navigator.pop(context),
+                    ElevatedButton.icon(
+                      icon: const Icon(
+                        FontAwesomeIcons.rotate,
+                      ),
+                      label: const Text("Try Again"),
+                      onPressed: () => PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        isIos: true,
+                        child: const HomePage(),
+                      ),
                     )
                   ],
                 ),

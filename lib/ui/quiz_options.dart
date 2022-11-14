@@ -5,6 +5,8 @@ import 'package:kuis_trivia/models/question.dart';
 import 'package:kuis_trivia/resources/api_provider.dart';
 import 'error.dart';
 import 'quiz_page.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class QuizOptionsDialog extends StatefulWidget {
   final Category category;
@@ -158,9 +160,12 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
           ),
           processing
               ? const CircularProgressIndicator()
-              : ElevatedButton(
+              : ElevatedButton.icon(
+                  icon: const Icon(
+                    FontAwesomeIcons.flagCheckered,
+                  ),
                   onPressed: _startQuiz,
-                  child: const Text("Start Quiz"),
+                  label: const Text("Start Quiz"),
                 ),
           const SizedBox(height: 20.0),
         ],
@@ -197,8 +202,9 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
       Navigator.pop(context);
       if (questions.isEmpty) {
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const ErrorPage(
+          PageTransition(
+            type: PageTransitionType.leftToRight,
+            child: const ErrorPage(
               message:
                   "There are not enough questions in the category, with the options you selected.",
               key: null,
@@ -209,8 +215,9 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
       }
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (_) => QuizPage(
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: QuizPage(
             questions: questions,
             category: widget.category,
           ),
@@ -219,8 +226,9 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
     } on SocketException catch (_) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (_) => const ErrorPage(
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: const ErrorPage(
             message:
                 "Can't reach the servers, \n Please check your internet connection.",
           ),
@@ -229,12 +237,11 @@ class QuizOptionsDialogState extends State<QuizOptionsDialog> {
     } catch (e) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (_) {
-            return const ErrorPage(
-              message: "Unexpected error trying to connect to the API",
-            );
-          },
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          child: const ErrorPage(
+            message: "Unexpected error trying to connect to the API",
+          ),
         ),
       );
     }

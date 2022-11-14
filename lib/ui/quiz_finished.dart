@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kuis_trivia/models/question.dart';
 import 'check_answers.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class QuizFinishedPage extends StatefulWidget {
   final List<Question> questions;
@@ -21,6 +23,8 @@ class _QuizFinishedPageState extends State<QuizFinishedPage> {
 
   static const myColorBG = Color.fromARGB(255, 154, 72, 208);
   static const myColorBG2 = Color.fromARGB(255, 255, 175, 240);
+  static const myColorRed = Color.fromARGB(255, 255, 0, 0);
+  static const myColorGreen = Color.fromARGB(255, 0, 255, 0);
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +39,16 @@ class _QuizFinishedPageState extends State<QuizFinishedPage> {
     );
     const TextStyle trailingStyle = TextStyle(
       color: myColorBG2,
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+    );
+    const TextStyle correctStyle = TextStyle(
+      color: myColorGreen,
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+    );
+    const TextStyle incorrectStyle = TextStyle(
+      color: myColorRed,
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
     );
@@ -104,7 +118,7 @@ class _QuizFinishedPageState extends State<QuizFinishedPage> {
                   ),
                   trailing: Text(
                     "$correct/${widget.questions.length}",
-                    style: trailingStyle,
+                    style: correctStyle,
                   ),
                 ),
               ),
@@ -121,7 +135,7 @@ class _QuizFinishedPageState extends State<QuizFinishedPage> {
                   ),
                   trailing: Text(
                     "${widget.questions.length - correct}/${widget.questions.length}",
-                    style: trailingStyle,
+                    style: incorrectStyle,
                   ),
                 ),
               ),
@@ -134,14 +148,17 @@ class _QuizFinishedPageState extends State<QuizFinishedPage> {
                       horizontal: 16.0,
                       vertical: 20.0,
                     ),
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(
+                        FontAwesomeIcons.house,
+                      ),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text("Goto Home"),
+                      label: const Text("Home"),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
@@ -150,18 +167,22 @@ class _QuizFinishedPageState extends State<QuizFinishedPage> {
                       horizontal: 16.0,
                       vertical: 20.0,
                     ),
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
+                      icon: const Icon(
+                        FontAwesomeIcons.listCheck,
+                      ),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text("Check Answers"),
+                      label: const Text("Answers"),
                       onPressed: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => CheckAnswersPage(
+                          PageTransition(
+                            type: PageTransitionType.leftToRight,
+                            child: CheckAnswersPage(
                               questions: widget.questions,
                               answers: widget.answers,
                             ),

@@ -4,6 +4,8 @@ import 'package:kuis_trivia/models/question.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'quiz_finished.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class QuizPage extends StatefulWidget {
   final List<Question> questions;
@@ -125,9 +127,12 @@ class QuizPageState extends State<QuizPage> {
                           vertical: 20.0,
                           horizontal: 64.0,
                         ),
-                        child: ElevatedButton(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(
+                            FontAwesomeIcons.arrowRight,
+                          ),
                           onPressed: _nextSubmit,
-                          child: Text(
+                          label: Text(
                             _currentIndex == (widget.questions.length - 1)
                                 ? "Submit"
                                 : "Next",
@@ -163,8 +168,9 @@ class QuizPageState extends State<QuizPage> {
       });
     } else {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) =>
+        PageTransition(
+          type: PageTransitionType.rightToLeftWithFade,
+          child:
               QuizFinishedPage(questions: widget.questions, answers: _answers),
         ),
       );
@@ -180,14 +186,20 @@ class QuizPageState extends State<QuizPage> {
             ),
             title: const Text("Warning!"),
             actions: <Widget>[
-              ElevatedButton(
-                child: const Text("Yes"),
+              ElevatedButton.icon(
+                icon: const Icon(
+                  FontAwesomeIcons.circleCheck,
+                ),
+                label: const Text("Yes"),
                 onPressed: () {
                   Navigator.pop(context, true);
                 },
               ),
-              ElevatedButton(
-                child: const Text("No"),
+              ElevatedButton.icon(
+                icon: const Icon(
+                  FontAwesomeIcons.circleXmark,
+                ),
+                label: const Text("No"),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
