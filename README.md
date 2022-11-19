@@ -6,6 +6,8 @@ This application makes use of the [Open Trivia Database](https://opentdb.com) AP
 
 Thank you for your contribution to the [Open Trivia Database](https://opentdb.com). ❤
 
+The app is available for download [here](https://github.com/refido/kuis_trivia/releases/tag/v0.1.0-beta).
+
 ## Specifications
 
 - Categories
